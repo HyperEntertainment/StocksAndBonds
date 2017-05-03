@@ -8,5 +8,7 @@ namespace Hyper.StocksAndBonds.Engine
     public class GameOptions
     {
         public int NumberOfPlayers { get; set; }
+
+        public int NumberOfYears { get; set; }
     }
 }

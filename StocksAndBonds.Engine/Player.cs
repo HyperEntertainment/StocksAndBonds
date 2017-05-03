@@ -11,15 +11,20 @@ using System.Web;
 
 namespace Hyper.StocksAndBonds.Engine
 {
-    public class User
+    public class Player
     {
         public Guid Id { get; set; }
+
         public string DisplayName { get; set; }
 
+        public Portfolio[] Investments { get; private set; }
 
-        // DemoStuff...
-        public string Name { get; set; }
-        public string Category { get; set; }
-        public decimal Price { get; set; }
+        public GameSession Session { get; private set; }
+
+        public Player(GameSession session)
+        {
+            this.Session = session;
+            this.Investments = new Portfolio[session.Options.NumberOfYears + 1];
+        }
     }
 }
