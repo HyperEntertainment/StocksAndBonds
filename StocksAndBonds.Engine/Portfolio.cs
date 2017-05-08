@@ -24,7 +24,7 @@ namespace Hyper.StocksAndBonds.Engine
             VallyPowerAndLight,
         }
 
-        private const int NumberAccountTypes = (int)AccountType.VallyPowerAndLight + 1;
+        public const int NumberAccountTypes = (int)AccountType.VallyPowerAndLight + 1;
 
         private int[] ammounts;
 
@@ -48,9 +48,29 @@ namespace Hyper.StocksAndBonds.Engine
             ammounts = new int[NumberAccountTypes];
         }
 
+        public int GetValueOfAccount(AccountType account)
+        {
+            int value = (int)account;
+
+            if (value < 0 || value >= Portfolio.NumberAccountTypes)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            return ammounts[value];
+        }
+
         internal void UpdateMarketValue(Portfolio startingYear, int[] marketChanges, MarketEvent marketEvent)
         {
-            throw new NotImplementedException();
+            for (int i = 1; i < Portfolio.NumberAccountTypes; ++i)
+            {
+                this.ammounts[i] = startingYear.ammounts[i] + marketChanges[i];
+            }
+
+            foreach (KeyValuePair<AccountType, int> change in marketEvent.MarketSegmentChanges)
+            {
+                this.ammounts[(int)change.Key] += change.Value;
+            }
         }
     }
 }

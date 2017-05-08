@@ -16,8 +16,10 @@ namespace Hyper.StocksAndBonds.Engine
             this.Ended = DateTime.MaxValue;
             this.random = new Random();
 
+            this.Players = new List<Player>();
             this.Options = options;
             this.Investments = new Portfolio[options.NumberOfYears + 1];
+            this.MarketEvents = new MarketEvent[options.NumberOfYears + 1];
         }
 
         public Guid Id { get; private set; }
@@ -36,10 +38,19 @@ namespace Hyper.StocksAndBonds.Engine
 
         public Portfolio[] Investments { get; set; }
 
-        public GameOptions Options { get; internal set; }
+        public MarketEvent[] MarketEvents { get; set; }
+
+        public GameOptions Options { get; private set; }
+
+        public List<Player> Players { get; set; }
 
         public void Initialize()
         {
+            for (int i = 0; i < this.Investments.Length; ++i)
+            {
+                this.Investments[i] = Portfolio.StartingMarket;
+            }
+
             this.LoadAllMarketEvents();
             this.CalculateMarketProgression();
         }
@@ -51,7 +62,7 @@ namespace Hyper.StocksAndBonds.Engine
             MarketEvent marketEvent;
             Portfolio previousYear = Portfolio.StartingMarket;
 
-            for (int i = 1; i < this.Options.NumberOfYears; ++i)
+            for (int year = 1; year < this.Options.NumberOfYears; ++year)
             {
                 // Figure out what happens to the market.
                 marketEvent = GetNextMarketEvent();
@@ -59,11 +70,11 @@ namespace Hyper.StocksAndBonds.Engine
                 changeIndex += this.random.Next(1, 6);
 
                 // TODO: Fix and where does it come from?
-                marketChanges = null;
+                marketChanges = new int[Portfolio.NumberAccountTypes];
 
-                Investments[i].UpdateMarketValue(previousYear, marketChanges, marketEvent);
-                previousYear = Investments[i];
-
+                Investments[year].UpdateMarketValue(previousYear, marketChanges, marketEvent);
+                MarketEvents[year] = marketEvent;
+                previousYear = Investments[year];
             }
         }
         private MarketEvent GetNextMarketEvent()

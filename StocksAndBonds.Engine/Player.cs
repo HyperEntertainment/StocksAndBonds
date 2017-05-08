@@ -26,5 +26,15 @@ namespace Hyper.StocksAndBonds.Engine
             this.Session = session;
             this.Investments = new Portfolio[session.Options.NumberOfYears + 1];
         }
+
+        public void BeginningOfYear()
+        {
+            // TODO: Earn dividends...
+        }
+
+        public void EndYear()
+        {
+            // TODO: something...
+        }
     }
 }
