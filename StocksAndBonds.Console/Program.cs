@@ -21,7 +21,7 @@ namespace StocksAndBonds
 
             for (int year = 1; year < session.Options.NumberOfYears; ++year)
             {
-                Console.WriteLine("Begining of year {0}.", year);
+                Console.WriteLine("Beginning of year {0}.", year);
 
                 Console.WriteLine("{0} Market", session.MarketEvents[year].CurrentMarketTrend);
                 Console.WriteLine("{0}", session.MarketEvents[year].Description);
